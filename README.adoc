@@ -1,6 +1,6 @@
 = Control what you resolve
 
-Maven resolver 1.8/1.9 adds a nice filtering feature but by default it requires some work to set it up whereas most of the time you just want to list a few groupId to use a particular repoId.
+Maven resolver 1.8/1.9 (Apache Maven 3.9/4.x) adds a nice filtering feature but by default it requires some work to set it up whereas most of the time you just want to list a few groupId to use a particular repoId.
 For that case, here is a simple extension you can easily setup and then configure the list from system properties (or `MAVEN_OPTS`).
 
 == Setup
