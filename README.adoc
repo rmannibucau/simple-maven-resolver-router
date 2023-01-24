@@ -1,0 +1,43 @@
+= Control what you resolve
+
+Maven resolver 1.8/1.9 adds a nice filtering feature but by default it requires some work to set it up whereas most of the time you just want to list a few groupId to use a particular repoId.
+For that case, here is a simple extension you can easily setup and then configure the list from system properties (or `MAVEN_OPTS`).
+
+== Setup
+
+Just add the jar to your maven distribution either in `lib/ext` or using `$project/.mvn/extensions.xml`:
+
+[source,xml]
+----
+<extensions>
+    <extension>
+      <groupId>com.github.rmannibucau.maven</groupId>
+      <artifactId>simple-maven-resolver-router</artifactId>
+      <version>$version</version>
+    </extension>
+</extensions>
+----
+
+== Configuration
+
+Configuration is read from aether configuration properties and system properties.
+
+[cols="m,5a,m", opts="headers"]
+|====
+| Key | Description | Default
+|rmannibucau.maven-resolver.simple-router.enabled|Is the extension enabled.|true
+|rmannibucau.maven-resolver.simple-router.defaultRepoId|Default repository id for not explicit configured groupIds.|central
+|rmannibucau.maven-resolver.simple-router.groups.$groupId|Repository id (`<repository>` for ex) to use for that `$groupId`.|-
+|====
+
+IMPORTANT: when the `groupId` has dots (ex: `com.company.foo`) the last property test is done using parent `groupId` so if `com.company.foo` has no repository id forced then `com.company` is tested then `com` if there is still no value and only after the `defaultRepoId` value is used.
+
+== Sample usage
+
+[source,bash]
+----
+mvn xxxxx \
+  -Drmannibucau.maven-resolver.simple-router.groups.org.sonatype=central \
+  -Drmannibucau.maven-resolver.simple-router.groups.com.google.code.findbugs=central \
+  ....
+----
